@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using 册宝真可爱.Utils;
 
 namespace 册宝真可爱.Entitys
@@ -8,6 +9,7 @@ namespace 册宝真可爱.Entitys
     /// 队伍
     /// G , NII , C , ...
     /// </summary>
+    [Serializable]
     public class Team
     {
         public int? TeamId { get; set; }
@@ -15,6 +17,8 @@ namespace 册宝真可爱.Entitys
         public string TeamName { get; set; }
 
         public Color TeamColor { get; set; }
+
+        public string TeamColorHTMLString { get; set; }
 
         public Team()
         {
@@ -26,6 +30,7 @@ namespace 册宝真可爱.Entitys
             this.TeamId = teamId;
             this.TeamName = teamName;
             this.TeamColor = teamColor;
+            this.TeamColorHTMLString = ColorTranslator.ToHtml(this.TeamColor);
         }
 
         public override string ToString()

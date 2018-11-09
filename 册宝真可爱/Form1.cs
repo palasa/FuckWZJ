@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -25,11 +26,16 @@ namespace 册宝真可爱
 
         private List<Live> allLives = new List<Live>();
 
+        private static readonly string dataXML = "live_data.xml";
+
         private bool login = false;
 
         private bool buyOK = false;
 
         private static Random r = new Random();
+
+        private string childRequestUrl;
+        private Live currentLive;
 
         private static DateTime serverDateTime;
         private static TimeSpan timeSpan;
@@ -40,6 +46,7 @@ namespace 册宝真可爱
             InitializeComponent();
 
             Form1.CheckForIllegalCrossThreadCalls = false;
+
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -82,10 +89,75 @@ namespace 册宝真可爱
                     this.btnBuyGoods.Enabled = true;
                     this.gbLogin.Enabled = false;
                 });
-                
-
-                
+                               
             }
+        }
+
+        /// <summary>
+        /// 获取所有演出信息的方法
+        /// </summary>
+        private void GetAllLives()
+        {
+            FileInfo file = new FileInfo(dataXML);
+            var now = DateTime.Now;
+            var exceptHours = new int[]{ 19, 20 };
+
+            // 如果有缓存，判断缓存的生成时间， 
+            // 一小时内的缓存有效 ，例外：周二 19:00~20:59 , 周三 19:00~20：59
+            
+            if ( file.Exists )
+            {                
+                if (  (now - file.LastWriteTime).TotalHours <= 1   )
+                {
+                    // 一小时以内，从缓存读取
+                    ReadAllLivesFromCache();
+                }
+                else
+                {
+                    //一小时以上
+                    //当前时间在 周二 19:00~20:59 , 周三 19:00~20：59 之内，， 从缓存读取
+                    if (now.DayOfWeek == DayOfWeek.Tuesday || now.DayOfWeek == DayOfWeek.Wednesday
+                        && exceptHours.Contains(now.Hour))
+                    {
+                        ReadAllLivesFromCache();
+                    }
+                    else
+                    {
+                        // 否则， 从服务器读取，并写入缓存
+                        ReadAllLivesFromServer();
+                    }
+                    
+                }
+            }
+            else
+            {
+                // 如果没有缓存， 从服务器读取，并写入缓存
+                ReadAllLivesFromServer();
+            }
+
+            LiveUtil.allLives = this.allLives;
+
+        }
+
+        private void ReadAllLivesFromServer()
+        {
+            MessageBox.Show("从服务器读取票务数据中...");
+            // 从服务器读取
+            Task.Factory.StartNew(GetTickets).ContinueWith(task => GetTicketsDetail()).ContinueWith(task =>
+            {
+                SerializeUtils.Serialize(allLives , dataXML );
+            }).ContinueWith(task=> MessageBox.Show("票务信息读取完毕"));       
+        }
+
+        private void ReadAllLivesFromCache()
+        {
+            this.allLives = SerializeUtils.DeSerialize<List<Live>>(dataXML);
+
+            foreach (var item in this.allLives)
+            {
+                item.Team.TeamColor = ColorTranslator.FromHtml(item.Team.TeamColorHTMLString);
+            }
+            MessageBox.Show("从缓存中读取票务数据完毕");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -99,8 +171,20 @@ namespace 册宝真可爱
             GetGroups();
 
             Task.Factory.StartNew(GetLoginPage);
-            
-            Task.Factory.StartNew(GetTickets).ContinueWith(task => GetTicketsDetail());
+
+            GetAllLives();
+
+
+            Task task = Task.Factory.StartNew(
+                () => {
+                    SetDdlTicket(allLives.OrderBy(live => live.Group.GroupId).ThenBy(live => live.StartTime));
+                }
+            ).ContinueWith(t => {
+                this.ddlTicket.SelectedIndex = 0;
+                this.ddlGroup.SelectedIndex = 0;
+            });
+
+            this.gbBuyTicket.Enabled = true;
 
 
             this.timerSyncDateTime.Start();
@@ -116,9 +200,9 @@ namespace 册宝真可爱
         {
             foreach (var live in allLives)
             {
-                Task.Factory.StartNew ( ()=> 
-                    live.LiveDetail = LiveUtil.GetLiveDetailByLiveId(live.TicketNumber)
-                );
+                // Task.Factory.StartNew ( ()=> 
+                live.LiveDetail = LiveUtil.GetLiveDetailByLiveId(live.TicketNumber);
+               // );
             }
         }
 
@@ -163,23 +247,9 @@ namespace 册宝真可爱
                 
                 allLives.Add(live);
 
-            }
-            
-            LiveUtil.allLives = allLives;
+            }           
 
-            this.ddlTicket.DisplayMember = "Name";
-            this.ddlTicket.ValueMember = "Id";
-
-            Task task = Task.Factory.StartNew(
-                () => {
-                    SetDdlTicket(allLives.OrderBy(live => live.Group.GroupId).ThenBy(live => live.StartTime));
-                }
-            ).ContinueWith( t => {
-                this.ddlTicket.SelectedIndex = 0;
-                this.ddlGroup.SelectedIndex = 0;
-            });
             
-            this.gbBuyTicket.Enabled = true;
         }
 
         private void SetDdlTicket( IEnumerable<Live> lives )
@@ -276,7 +346,7 @@ namespace 册宝真可爱
 
         private void buy()
         {
-            EventUtil.ClearAllEvents(this.timerSubRequest, "Tick");
+            // EventUtil.ClearAllEvents(this.timerSubRequest, "Tick");
 
             try
             {
@@ -385,10 +455,7 @@ namespace 册宝真可爱
                     else if (t.Result.IndexOf("下单申请成功") > -1 && DateTime.Now.Hour >= 8)
                     {
                         // 转圈中， 发送子请求
-                        timerSubRequest.Tick += (s, e) => {
-                            string childRequestUrl = string.Format("https://shop.48.cn/TOrder/tickCheck?id={0}&r={1}", l.TicketNumber, r.NextDouble());
-                            util.GET(childRequestUrl, cc);
-                        };
+                        
                         timerSubRequest.Start();
                     }
                     // MessageBox.Show( t.Result );
@@ -406,13 +473,14 @@ namespace 册宝真可爱
 
         private void buyNoAlert()
         {
-            EventUtil.ClearAllEvents(this.timerSubRequest, "Tick");
+            // EventUtil.ClearAllEvents(this.timerSubRequest, "Tick");
 
             try
             {
                 ComboBoxListItem item = this.ddlTicket.SelectedItem as ComboBoxListItem;
 
                 Live l = allLives.Find(live => live.TicketNumber == item.Id);
+                this.currentLive = l;
 
                 SeatType seat;
                 if (radVip.Checked)
@@ -442,20 +510,16 @@ namespace 册宝真可爱
                 }).ContinueWith(t =>
                 {                   
                     if (t.Result.IndexOf("success") > -1 ||
-                        (t.Result.IndexOf("下单申请成功") > -1 && DateTime.Now.Hour == 7)
+                        (t.Result.IndexOf("下单申请成功") > -1 && DateTime.Now.Hour == 19)
                     )
-                    {
+                    {   // 星沃卡购买成功
                         this.buyOK = true;
                         MessageBox.Show("购买成功！");
                         timerSubRequest.Stop();
                     }
-                    else if (t.Result.IndexOf("下单申请成功") > -1 && DateTime.Now.Hour >= 8)
-                    {                                               
-                        // 子请求
-                        timerSubRequest.Tick += (s, e) => {
-                            string childRequestUrl = string.Format("https://shop.48.cn/TOrder/tickCheck?id={0}&r={1}" , l.TicketNumber , r.NextDouble() );
-                            util.GET(childRequestUrl, cc);
-                        };
+                    else if (t.Result.IndexOf("下单申请成功") > -1 )
+                    {
+                        MessageBox.Show("sub req");
                         timerSubRequest.Start();
                     }    
                     this.btnBuyOne.Enabled = true;
@@ -646,9 +710,7 @@ namespace 册宝真可爱
             else
             {
                 buyNoAlert();
-            }
-
-            
+            }            
         }
 
         private void ddlGroup_DrawItem(object sender, DrawItemEventArgs e)
@@ -697,7 +759,11 @@ namespace 册宝真可爱
 
         private void timerSubRequest_Tick(object sender, EventArgs e)
         {
-
+            Task.Factory.StartNew(() =>
+            {
+                childRequestUrl = string.Format("https://shop.48.cn/TOrder/tickCheck?id={0}&r={1}", this.currentLive.TicketNumber, r.NextDouble());
+                util.GET(childRequestUrl, cc);
+            });              
         }
     }
 }

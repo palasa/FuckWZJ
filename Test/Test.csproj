@@ -44,8 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DateTimeUtil.cs" />
+    <Compile Include="Live.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializeUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

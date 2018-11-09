@@ -73,6 +73,7 @@
     <Compile Include="Utils\LiveUtil.cs" />
     <Compile Include="Entitys\TeamColor.cs" />
     <Compile Include="Enums\TheaterType.cs" />
+    <Compile Include="Utils\SerializeUtils.cs" />
     <Compile Include="Utils\TeamUtil.cs" />
     <Compile Include="Utils\DateTimeUtil.cs" />
     <Compile Include="Utils\TheaterUtil.cs" />

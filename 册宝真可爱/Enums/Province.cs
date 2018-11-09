@@ -1,5 +1,8 @@
-﻿namespace 册宝真可爱.Enums
+﻿using System;
+
+namespace 册宝真可爱.Enums
 {
+    [Serializable]
     public enum Province
     {
         上海 , 

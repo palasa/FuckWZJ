@@ -7,7 +7,8 @@ using 册宝真可爱.Enums;
 
 namespace 册宝真可爱.Entitys
 {
-    class LiveDetail
+    [Serializable]
+    public class LiveDetail
     {
         /// <summary>
         /// 开始的详细时间，具体到 时 / 分

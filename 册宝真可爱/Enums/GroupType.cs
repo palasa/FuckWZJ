@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace 册宝真可爱.Enums
 {
-    enum GroupType
+    public enum GroupType
     {
         [DescriptionAttribute("全部")]
         ALL = 0 ,

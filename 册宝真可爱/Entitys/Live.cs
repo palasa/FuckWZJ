@@ -10,12 +10,13 @@ namespace 册宝真可爱.Entitys
     /// <summary>
     /// 公演
     /// </summary>
-    class Live
+    [Serializable]
+    public class Live
     {
         /// <summary>
         /// 演出地点
         /// </summary>
-        public Location Location { get; set; }
+        public Theater Theater { get; set; }
 
         /// <summary>
         /// 所属组合
@@ -55,9 +56,9 @@ namespace 册宝真可爱.Entitys
 
         }
 
-        public Live(Location location, Group group, Team team, DateTime startTime ,int ticketNumber )
+        public Live(Theater theater, Group group, Team team, DateTime startTime ,int ticketNumber )
         {
-            this.Location = location;
+            this.Theater = theater;
             this.Group = group;
             this.Team = team;
             this.StartTime = startTime;
@@ -67,7 +68,7 @@ namespace 册宝真可爱.Entitys
         public override string ToString()
         {
             return string.Format("{0}组合 Team {1} 将于 {2} 在 {3} 处进行演出 , 门票网址：{4}",
-                Group.GroupName , Team.TeamName , StartTime , Location , TicketUrl );
+                Group.GroupName , Team.TeamName , StartTime , Theater, TicketUrl );
         }
 
         //public void SetGroupByTeam()

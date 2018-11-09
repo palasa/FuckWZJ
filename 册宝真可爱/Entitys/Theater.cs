@@ -7,7 +7,8 @@ using 册宝真可爱.Enums;
 
 namespace 册宝真可爱.Entitys
 {
-    class Theater : Location
+    [Serializable]
+    public class Theater : Location
     {
         public TheaterType? TheaterType { get; set; }
 
@@ -22,6 +23,11 @@ namespace 册宝真可爱.Entitys
             this.City = City;
             this.Address = address;
             this.TheaterType = theaterType;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}省 {1}市 {2}", Province.ToString(), City.ToString(), Address);
         }
     }
 }

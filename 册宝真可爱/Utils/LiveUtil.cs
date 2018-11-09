@@ -31,7 +31,7 @@ namespace 册宝真可爱.Utils
 
             if( live.Group.GroupName == GroupUtil.UnKnownGroup.GroupName )
             {
-                live.Group = GroupUtil.GetGroupByCityName(live.Location.City.ToString());
+                live.Group = GroupUtil.GetGroupByCityName(live.Theater.City.ToString());
             }
             
 
@@ -203,9 +203,8 @@ namespace 册宝真可爱.Utils
 
                 // 11月10日公演时间为14:00，Team C《梦想的旗帜》剧场公演，曾佳生日公演，本场公演将网络直播 。
                 // 11月10日公演时间为19:00，Team K《美丽世界》剧场公演，本场公演将网络直播。 
-
-
-                // todo: 同日两场公演时出问题
+            
+                
                 var regStr = live.StartTime.Month + "月" + live.StartTime.Day + "日"
                 + "([A-Z]{1,4}|预备生|).{1,20}为\\d{2}[:：]\\d{2}.{1,53}网络直播";
                 var regexp = new Regex(regStr);
@@ -269,12 +268,8 @@ namespace 册宝真可爱.Utils
             );
 
             detail.StartTime = startTime;
-
-            // detail.Detail = detailString;
+            
             detail.Detail = detailString ;
-          
-
-            // detail.Detail = detailString;
             return detail;
         }
 
@@ -283,26 +278,26 @@ namespace 册宝真可爱.Utils
             switch (city)
             {
                 case "上海":
-                    live.Location = TheaterUtil.JXL;
+                    live.Theater = TheaterUtil.JXL;
                     break;
                 case "广州":
-                    live.Location = TheaterUtil.ZT;
+                    live.Theater = TheaterUtil.ZT;
                     break;
                 case "北京":
-                    live.Location = TheaterUtil.UT;
+                    live.Theater = TheaterUtil.UT;
                     break;
                 case "沈阳":
-                    live.Location = TheaterUtil.YLC;
+                    live.Theater = TheaterUtil.YLC;
                     break;
                 case "重庆":
-                    live.Location = TheaterUtil.GR;
+                    live.Theater = TheaterUtil.GR;
                     break;
                 default:
-                    Location unknownLocation = new Location();
+                    Theater unknownLocation = new Theater();
                     unknownLocation.Province = Enums.Province.其他;
                     unknownLocation.City = Enums.City.其他;
                     unknownLocation.Address = "未知";
-                    live.Location = unknownLocation;
+                    live.Theater = unknownLocation;
                     break;
             }
         }

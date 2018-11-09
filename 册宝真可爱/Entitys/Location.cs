@@ -1,4 +1,5 @@
-﻿using 册宝真可爱.Entitys;
+﻿using System;
+using 册宝真可爱.Entitys;
 using 册宝真可爱.Enums;
 
 namespace 册宝真可爱.Entitys
@@ -7,6 +8,7 @@ namespace 册宝真可爱.Entitys
     /// <summary>
     /// 演出地点
     /// </summary>
+    [Serializable]
     public class Location
     {
         public Province? Province { get; set; }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace 册宝真可爱.Enums
 {
-    enum LiveType
+    [Serializable]
+    public enum LiveType
     {
         普通场 ,
         实名场 ,

@@ -11,6 +11,7 @@ namespace 册宝真可爱.Entitys
     /// 团体
     /// BEJ48 , SNH48 , GNZ48 , ...
     /// </summary>
+    [Serializable]
     public class Group
     {
         public int? GroupId { get; set; }

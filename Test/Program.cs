@@ -33,12 +33,20 @@ namespace Test
             //    Console.WriteLine( item.ToString() );
             //}
 
-            var timeInt = 1541514123000;
+            //var timeInt = 1541514123000;
 
-            // https://shop.48.cn/pai/GetTime
-            // "\/Date(1541514476000)\/"
+            //// https://shop.48.cn/pai/GetTime
+            //// "\/Date(1541514476000)\/"
 
-            Console.WriteLine( DateTimeUtil.TimeSpanToDateTime(1541514123000/1000) );
+            //Console.WriteLine( DateTimeUtil.TimeSpanToDateTime(1541514123000/1000) );
+            var now = DateTime.Now;
+
+            var allLives = new List<Live> {
+                new Live { StartTime = now, TicketNumber = 123 } ,
+                new Live { StartTime = now.AddHours(1), TicketNumber = 456 } ,
+            };
+
+            Console.WriteLine(SerializeUtils.Serialize(allLives));
 
         }
     }

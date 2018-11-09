@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace 册宝真可爱.Enums
 {
-    enum TheaterType
+    [Serializable]
+    public enum TheaterType
     {
         嘉兴路 ,
         悠唐 ,

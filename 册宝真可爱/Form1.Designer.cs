@@ -100,7 +100,7 @@ namespace 册宝真可爱
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(200, 35);
             this.txtPassword.TabIndex = 3;
-            this.txtPassword.Text = "xwf18013409615";
+            this.txtPassword.Text = "w7ihps8Y";
             // 
             // lblPassword
             // 
@@ -117,7 +117,7 @@ namespace 册宝真可爱
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(200, 35);
             this.txtUsername.TabIndex = 1;
-            this.txtUsername.Text = "前田小敦子";
+            this.txtUsername.Text = "chongchong";
             // 
             // lblUsername
             // 
@@ -271,6 +271,7 @@ namespace 册宝真可爱
             // 
             // ddlTicket
             // 
+            this.ddlTicket.DisplayMember = "Name";
             this.ddlTicket.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.ddlTicket.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlTicket.FormattingEnabled = true;
@@ -278,6 +279,7 @@ namespace 册宝真可爱
             this.ddlTicket.Name = "ddlTicket";
             this.ddlTicket.Size = new System.Drawing.Size(479, 36);
             this.ddlTicket.TabIndex = 4;
+            this.ddlTicket.ValueMember = "Id";
             this.ddlTicket.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ddlTicket_DrawItem);
             this.ddlTicket.SelectedIndexChanged += new System.EventHandler(this.ddlTicket_SelectedIndexChanged);
             // 

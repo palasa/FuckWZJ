@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace 册宝真可爱.Enums
 {
-    enum SeatType
+    public enum SeatType
 	{		
 		VIP = 2,
 		普 = 3,
