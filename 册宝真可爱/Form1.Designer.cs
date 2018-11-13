@@ -62,6 +62,8 @@ namespace 册宝真可爱
             this.timerSubRequest = new System.Windows.Forms.Timer(this.components);
             this.timerSyncDateTime = new System.Windows.Forms.Timer(this.components);
             this.lblTimeSpan = new System.Windows.Forms.Label();
+            this.chkBuyGoods = new System.Windows.Forms.CheckBox();
+            this.chkBuyTicket = new System.Windows.Forms.CheckBox();
             this.gbLogin.SuspendLayout();
             this.gbBuyTicket.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtNumber)).BeginInit();
@@ -100,7 +102,6 @@ namespace 册宝真可爱
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(200, 35);
             this.txtPassword.TabIndex = 3;
-            this.txtPassword.Text = "w7ihps8Y";
             // 
             // lblPassword
             // 
@@ -302,6 +303,7 @@ namespace 册宝真可爱
             this.gbGoods.Controls.Add(this.btnBuyGoods);
             this.gbGoods.Controls.Add(this.lblGoodsId);
             this.gbGoods.Controls.Add(this.txtGoodsId);
+            this.gbGoods.Enabled = false;
             this.gbGoods.Location = new System.Drawing.Point(12, 747);
             this.gbGoods.Name = "gbGoods";
             this.gbGoods.Size = new System.Drawing.Size(1359, 125);
@@ -374,17 +376,43 @@ namespace 册宝真可爱
             // lblTimeSpan
             // 
             this.lblTimeSpan.AutoSize = true;
-            this.lblTimeSpan.Location = new System.Drawing.Point(526, 35);
+            this.lblTimeSpan.Location = new System.Drawing.Point(475, 35);
             this.lblTimeSpan.Name = "lblTimeSpan";
             this.lblTimeSpan.Size = new System.Drawing.Size(82, 24);
             this.lblTimeSpan.TabIndex = 16;
             this.lblTimeSpan.Text = "label1";
+            // 
+            // chkBuyGoods
+            // 
+            this.chkBuyGoods.AutoSize = true;
+            this.chkBuyGoods.Location = new System.Drawing.Point(1162, 67);
+            this.chkBuyGoods.Name = "chkBuyGoods";
+            this.chkBuyGoods.Size = new System.Drawing.Size(174, 28);
+            this.chkBuyGoods.TabIndex = 18;
+            this.chkBuyGoods.Text = "购商品/冷餐";
+            this.chkBuyGoods.UseVisualStyleBackColor = true;
+            this.chkBuyGoods.CheckedChanged += new System.EventHandler(this.chkBuyGoods_CheckedChanged);
+            // 
+            // chkBuyTicket
+            // 
+            this.chkBuyTicket.AutoSize = true;
+            this.chkBuyTicket.Checked = true;
+            this.chkBuyTicket.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkBuyTicket.Location = new System.Drawing.Point(1162, 31);
+            this.chkBuyTicket.Name = "chkBuyTicket";
+            this.chkBuyTicket.Size = new System.Drawing.Size(90, 28);
+            this.chkBuyTicket.TabIndex = 17;
+            this.chkBuyTicket.Text = "购票";
+            this.chkBuyTicket.UseVisualStyleBackColor = true;
+            this.chkBuyTicket.CheckedChanged += new System.EventHandler(this.chkBuyTicket_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1443, 893);
+            this.Controls.Add(this.chkBuyGoods);
+            this.Controls.Add(this.chkBuyTicket);
             this.Controls.Add(this.lblTimeSpan);
             this.Controls.Add(this.lblTimeToEight);
             this.Controls.Add(this.gbGoods);
@@ -443,6 +471,8 @@ namespace 册宝真可爱
         private System.Windows.Forms.Timer timerSubRequest;
         private System.Windows.Forms.Timer timerSyncDateTime;
         private System.Windows.Forms.Label lblTimeSpan;
+        private System.Windows.Forms.CheckBox chkBuyGoods;
+        private System.Windows.Forms.CheckBox chkBuyTicket;
     }
 }
 

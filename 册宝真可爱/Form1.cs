@@ -116,7 +116,8 @@ namespace 册宝真可爱
                 {
                     //一小时以上
                     //当前时间在 周二 19:00~20:59 , 周三 19:00~20：59 之内，， 从缓存读取
-                    if (now.DayOfWeek == DayOfWeek.Tuesday || now.DayOfWeek == DayOfWeek.Wednesday
+                    // MessageBox.Show(now.Hour.ToString());
+                    if ( (now.DayOfWeek == DayOfWeek.Tuesday || now.DayOfWeek == DayOfWeek.Wednesday)
                         && exceptHours.Contains(now.Hour))
                     {
                         ReadAllLivesFromCache();
@@ -686,11 +687,19 @@ namespace 册宝真可爱
             // 时间到，自动点击购买按钮
             if (chkTimeUpAutoBuy.Checked && timeSpan.TotalSeconds < 0 && login)
             {
-                // 购票
-                btnBuyOne_Click(null, null);
 
-                // 购冷餐
-                btnBuyGoods_Click(null, null);
+                if (this.chkBuyTicket.Checked)
+                {
+                    // 购票
+                    btnBuyOne_Click(null, null);
+                }
+
+                if (this.chkBuyGoods.Checked)
+                {
+                    // 购冷餐
+                    btnBuyGoods_Click(null, null);
+                }
+                
                 // 停止计时器
                 this.timerAutoBuyAtEight.Stop();
             }
@@ -764,6 +773,16 @@ namespace 册宝真可爱
                 childRequestUrl = string.Format("https://shop.48.cn/TOrder/tickCheck?id={0}&r={1}", this.currentLive.TicketNumber, r.NextDouble());
                 util.GET(childRequestUrl, cc);
             });              
+        }
+
+        private void chkBuyTicket_CheckedChanged(object sender, EventArgs e)
+        {
+            this.gbBuyTicket.Enabled = this.chkBuyTicket.Checked;
+        }
+
+        private void chkBuyGoods_CheckedChanged(object sender, EventArgs e)
+        {
+            this.gbGoods.Enabled = this.chkBuyGoods.Checked;
         }
     }
 }
